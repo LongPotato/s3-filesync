@@ -17,8 +17,13 @@
   },
   "homepage": "https://github.com/LongPotato/s3-filesync#readme",
   "dependencies": {
+<<<<<<< HEAD
     "aws-sdk": "^2.7.27",
     "express": "^4.14.0",
     "fs": "0.0.1-security"
+=======
+    "chokidar": "^1.6.1",
+    "watchr": "^3.0.1"
+>>>>>>> 4c5d87f1a6058f66bc4f0a23f863b46fe3f98a89
   }
 }
