@@ -9,6 +9,13 @@ var app = express()
 
 var bucketName = 'mp499test';
 
+// This is how your enable CORS for your web service
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 app.get('/', function(req, res) {
 	res.send('Hello World!');
 
@@ -26,22 +33,25 @@ app.get('/list', function(req, res){
 })
 
 
-app.get('/',function(req, res) {
-
-})
-
 function uploadChanges(filePath){
-	params = {Bucket: bucketName, Key: filePath}
-
-	s3.putObject(params, function(err, data) {
+	fs.readFile(filePath, function (err, data) {
+		params = {Bucket: bucketName, Key: filePath, Body: data,ACL: 'public-read'}
+		s3.putObject(params, function(err, data) {
 			 if (err) {
 					 console.log(err)
 			 } else {
-					 console.log("Successfully changes to " + myBucket, data);
+					 console.log("Successfully changes to " + bucketName, data);
 			 }
 	});
+});
+}
 
-
+function deleteChanges(fileName){
+	params = {Bucket: bucketName, Key: fileName}
+	s3.deleteObject(params, function(err, data) {
+  	if (err) console.log(err, err.stack); // an error occurred
+  	else console.log("Successfully changes to " + bucketName, data);         // successful response
+});
 }
 
 app.listen(3000, function () {
@@ -52,12 +62,15 @@ app.listen(3000, function () {
 		switch (changeType) {
 			case 'update':
 				console.log('the file', fullPath, 'was updated', currentStat, previousStat)
+				uploadChanges(fullPath);
 				break
 			case 'create':
 				console.log('the file', fullPath, 'was created', currentStat)
+				uploadChanges(fullPath);
 				break
 			case 'delete':
 				console.log('the file', fullPath, 'was deleted', previousStat)
+				deleteChanges(fullPath);
 				break
 		}
 	}
