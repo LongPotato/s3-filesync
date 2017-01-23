@@ -1,0 +1,19 @@
+{
+  "name": "s3-filesync",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LongPotato/s3-filesync.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LongPotato/s3-filesync/issues"
+  },
+  "homepage": "https://github.com/LongPotato/s3-filesync#readme"
+}
