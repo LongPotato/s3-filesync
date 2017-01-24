@@ -2,7 +2,7 @@ var express = require('express')
 var AWS = require('aws-sdk')
 var fs = require('fs')
 var watchr = require('watchr');
-
+var https = require('https');
 var s3 = new AWS.S3();
 
 var app = express()
@@ -15,7 +15,10 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
-
+var options = {
+	key: fs.readFileSync('./privatekey.pem'),
+	cert: fs.readFileSync('./server.crt')
+};
 app.get('/', function(req, res) {
 	res.send('Hello World!');
 
@@ -53,9 +56,9 @@ function deleteChanges(fileName){
   	else console.log("Successfully changes to " + bucketName, data);         // successful response
 });
 }
-
-app.listen(8080, function () {
-  console.log('Example app listening on port 8080!');
+var server = https.createServer(options,app);
+server.listen(8080, function () {
+  console.log('Example app listening on port 443!');
 
 	var path = process.cwd() + '/dropbox';
 	function listener (changeType, fullPath, currentStat, previousStat) {
